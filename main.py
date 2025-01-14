@@ -4,7 +4,8 @@ import settings, pygame, sys
 from utils import Background
 from player import Player
 from enemies import *
-import game_functions
+from  game_functions import *
+from levels import *
 
 def main():
     pygame.init()
@@ -27,6 +28,9 @@ def main():
     enemies_list = pygame.sprite.Group(enemies_list)
     bullets = pygame.sprite.Group()
     running = True
+
+    game_functions = GameFunctions()
+    level = levels()
     while running:
         clock.tick(60)
         for event in pygame.event.get():
@@ -38,17 +42,23 @@ def main():
                     sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Detecta si se presiona ESC
-                    game_functions.GameFunctions.shoot(player, all_sprites, bullets)
+                    game_functions.shoot(player, all_sprites, bullets)
                       
         
         all_sprites.update()
-        shooted = game_functions.GameFunctions.shoot_impact(enemies_list,bullets)
-        colission= game_functions.GameFunctions.colission_detection(player,enemies_list)
+        shooted = game_functions.shoot_impact(enemies_list,bullets)
+        colission= game_functions.colission_detection(player,enemies_list)
         if colission:
             running = False
 
         screen.blit(bg,[0,0])
-        all_sprites.draw(screen) 
+        all_sprites.draw(screen)
+        score = game_functions.get_score()
+        level_changer = level.level_changer(screen,score)
+        draw_score= game_functions.draw_text(screen, f"Score: {score}", 25, settings.WIDTH // 2, 10)
+   
+        
+ 
         pygame.display.flip()
     pygame.quit()    
 
