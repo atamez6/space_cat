@@ -38,18 +38,13 @@ class GreenalienManager:
         self.all_sprites = all_sprites_group
 
         for _ in range(num_enemies):
-            enemy = Greenalien()
+            self.enemy = Greenalien()
 
-            enemy.speed_axe_y = random.randrange(1,2)
-            enemy.speed_axe_x = random.randrange(-2,2)
-            self.enemies.add(enemy)
-            self.all_sprites.add(enemy)  # Añadir también al grupo principal
+            self.enemy.speed_axe_y = random.randrange(1,2)
+            self.enemy.speed_axe_x = random.randrange(-2,2)
+            self.enemies.add(self.enemy)
+            self.all_sprites.add(self.enemy)  # Añadir también al grupo principal
 
-    def update(self):
-        self.enemies.update()
-           
-
-            
 
 
 class RedalienManager:
@@ -64,6 +59,3 @@ class RedalienManager:
             enemy.speed_axe_x = random.randrange(-4,4)
             self.enemies.add(enemy)
             self.all_sprites.add(enemy)  # Añadir también al grupo principal
-
-    def update(self):
-        self.enemies.update()
