@@ -8,7 +8,7 @@ class Enemies(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, image_resize)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(settings.WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-100, -40)
+        self.rect.y = random.randrange(-140, -100)
         
         
         self.speed_axe_y = 0
@@ -21,7 +21,7 @@ class Enemies(pygame.sprite.Sprite):
             self.speed_axe_x = -self.speed_axe_x
         if self.rect.top > settings.HEIGHT + 9:
             self.rect.x = random.randrange(settings.WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-100, -40)
+            self.rect.y = random.randrange(-140, -100)
             
             
 class Redalien(Enemies):
