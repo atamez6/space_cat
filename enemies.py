@@ -1,4 +1,4 @@
-import pygame, settings, random
+import pygame, settings, random, levels
 
 class Enemies(pygame.sprite.Sprite):
     def __init__(self,image_path):
@@ -27,7 +27,7 @@ class Enemies(pygame.sprite.Sprite):
 class Redalien(Enemies):
     def __init__(self):
         super().__init__("assets/images/avatars/red_alien.png")
-
+        
 class Greenalien(Enemies):
     def __init__(self):
         super().__init__("assets/images/avatars/green_alien.png")
@@ -36,26 +36,32 @@ class GreenalienManager:
     def __init__(self, num_enemies, all_sprites_group):
         self.enemies = pygame.sprite.Group()
         self.all_sprites = all_sprites_group
-
+        self.num_enemies = num_enemies
         for _ in range(num_enemies):
-            self.enemy = Greenalien()
+            self.add_enemy(1)
 
-            self.enemy.speed_axe_y = random.randrange(1,2)
-            self.enemy.speed_axe_x = random.randrange(-2,2)
-            self.enemies.add(self.enemy)
-            self.all_sprites.add(self.enemy)  # Añadir también al grupo principal
-
-
+# Agregar enemigos según el nivel
+    def add_enemy(self, level):
+        for _ in range(level):  # Generar más enemigos según el nivel
+            enemy = Greenalien()
+            enemy.speed_axe_y = random.randint(1, 3) 
+            enemy.speed_axe_x = random.randint(-2, 2)
+            self.enemies.add(enemy)
+            self.all_sprites.add(enemy)
+            print(f"Enemigo añadido: Nivel {level}, Total: {len(self.enemies)}")  # DEBUG
 
 class RedalienManager:
     def __init__(self, num_enemies, all_sprites_group):
         self.enemies = pygame.sprite.Group()
         self.all_sprites = all_sprites_group
-
+        self.num_enemies = num_enemies
         for _ in range(num_enemies):
+            self.add_enemy(1)
+    def add_enemy(self, level):
+        for _ in range(level):  # Generar más enemigos según el nivel
             enemy = Redalien()
-
-            enemy.speed_axe_y = random.randrange(3,5)
-            enemy.speed_axe_x = random.randrange(-4,4)
+            enemy.speed_axe_y = random.randint(1, 3) 
+            enemy.speed_axe_x = random.randint(-2, 2)
             self.enemies.add(enemy)
-            self.all_sprites.add(enemy)  # Añadir también al grupo principal
+            self.all_sprites.add(enemy)
+            print(f"Enemigo añadido: Nivel {level}, Total: {len(self.enemies)}")  # DEBUG

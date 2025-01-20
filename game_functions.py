@@ -22,35 +22,34 @@ class Bullet(pygame.sprite.Sprite):
 
 
 class GameFunctions:
-
     def __init__(self):
-        self._total_score_ = 0000
+        self._score_ = 0  # Inicializa el puntaje en 0
+    @staticmethod
+    def draw_text(surface, text, size, x, y):
+        font = pygame.font.SysFont(None, size)
+        text_surface = font.render(text, True, settings.GRAY)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        surface.blit(text_surface, text_rect)
 
-    def colission_detection(self,player,enemies):
-        colission= pygame.sprite.spritecollide(player,enemies, True)
-        if colission:
-            return True
-            
-    def shoot(self,player, all_sprites, bullets):
-        # Crear una bala en las coordenadas del jugador
+    def shoot(self, player, all_sprites, bullets):
         bullet = Bullet(player.rect.centerx, player.rect.top)
-        all_sprites.add(bullet)  # Agregar la bala al grupo de todos los sprites
-        bullets.add(bullet) 
-        
+        all_sprites.add(bullet)
+        bullets.add(bullet)
 
-    def shoot_impact(self,enemies_list, bullets):
+    def shoot_impact(self, enemies_list, bullets):
         impacts = pygame.sprite.groupcollide(enemies_list, bullets, True, True)
         for impact in impacts:
-            self._total_score_ += 100
+            self._score_ += 25  # Incrementar el puntaje
+            print(f"Enemigo impactado, nuevo puntaje: {self._score_}")  # DEBUG
 
+    def colission_detection(self, player, enemies):
+        collision = pygame.sprite.spritecollide(player, enemies, True)
+        if collision:
+            print("Colisión detectada, fin del juego.")  # DEBUG
             return True
-        
+        return False
+
+
     def get_score(self):
-        return int(self._total_score_) 
-        
-    def draw_text(self,surface, text, size, x, y):
-        font = pygame.font.SysFont("",size)
-        text_to_box = font.render(text,True, settings.GRAY)
-        text_rect = text_to_box.get_rect()
-        text_rect.midtop = (x,y)
-        surface.blit(text_to_box,text_rect)
+        return self._score_
