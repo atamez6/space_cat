@@ -44,7 +44,7 @@ class GreenalienManager:
     def add_enemy(self, level):
         for _ in range(level):  # Generar más enemigos según el nivel
             enemy = Greenalien()
-            enemy.speed_axe_y = random.randint(1, 3) 
+            enemy.speed_axe_y = random.randint(1, 2) 
             enemy.speed_axe_x = random.randint(-2, 2)
             self.enemies.add(enemy)
             self.all_sprites.add(enemy)
@@ -56,12 +56,12 @@ class RedalienManager:
         self.all_sprites = all_sprites_group
         self.num_enemies = num_enemies
         for _ in range(num_enemies):
-            self.add_enemy(1)
+            self.add_enemy(2)
     def add_enemy(self, level):
         for _ in range(level):  # Generar más enemigos según el nivel
             enemy = Redalien()
-            enemy.speed_axe_y = random.randint(1, 3) 
-            enemy.speed_axe_x = random.randint(-2, 2)
+            enemy.speed_axe_y = random.randint(3, 4) 
+            enemy.speed_axe_x = random.randint(-5, 5)
             self.enemies.add(enemy)
             self.all_sprites.add(enemy)
             print(f"Enemigo añadido: Nivel {level}, Total: {len(self.enemies)}")  # DEBUG
