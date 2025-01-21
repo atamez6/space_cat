@@ -8,7 +8,7 @@ class Levels:
         self.level = 1
         self.base_score = 125  # Puntaje base para el nivel 1
         self.next_level_score = self.base_score  # Puntaje requerido para el siguiente nivel
-        self.level_up_sound = pygame.mixer.Sound("assets/sounds/level_up.wav")
+        self.level_up_sound = pygame.mixer.Sound("assets/sounds/level.wav")
 
     def check_level_up(self, score):
         # Comparar el puntaje actual con el puntaje requerido para subir de nivel

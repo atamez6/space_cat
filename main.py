@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import settings, pygame, sys
-from utils import Background
+from utils import Background,Sounds
 from player import Player
 from enemies import *
 from  game_functions import *
@@ -18,6 +18,11 @@ def main():
     all_sprites = pygame.sprite.Group()
     player = Player()
     bg = Background.background()
+    music = Sounds.music_main()
+
+
+
+
     all_sprites.add(player)
 
     green_alien_manager = GreenalienManager(6, all_sprites)
