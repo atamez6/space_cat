@@ -13,6 +13,8 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.bottom = settings.HEIGHT - 10
         self.speed_axe_x = 0
+        self.live_player = 100
+    
 
     def update(self):
         self.speed_axe_x = 0
