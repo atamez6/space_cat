@@ -1,6 +1,8 @@
-import pygame
+import pygame, utils, player
+import game_functions
+
 import settings
-from  game_functions import *
+
 from enemies import *
 
 class Levels:
@@ -25,7 +27,8 @@ class Levels:
         surface.blit(text_surface, text_rect)
 
 
-    def increase_difficulty(self, green_manager, red_manager):
+    def increase_difficulty(self, green_manager, red_manager,screen,bg,clock):
+
         # Incrementar velocidad de los enemigos existentes
         for enemy in green_manager.enemies:
             enemy.speed_axe_y = min(enemy.speed_axe_y + 1, 10)  # Limitar la velocidad máxima
@@ -33,11 +36,18 @@ class Levels:
             enemy.speed_axe_y = min(enemy.speed_axe_y + 2, 15)  # Limitar la velocidad máxima
 
         # Generar enemigos adicionales según el nivel
-        if self.level <= 2:
+        if self.level == 2:
             green_manager.add_enemy(self.level+2)
         elif self.level in [3, 4]:
             green_manager.add_enemy(self.level)
             red_manager.add_enemy(self.level // 2 +1)
-        elif self.level >= 5:
+        elif self.level in [5, 9]:
             green_manager.add_enemy(self.level // 2 +1)
             red_manager.add_enemy(self.level)
+        elif self.level == 10:
+            utils.screen_no_game.screen_win(screen, clock)
+            return False
+        return True
+ 
+
+  

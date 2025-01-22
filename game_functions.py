@@ -7,11 +7,11 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.image.load("assets/images/avatars/banana_bullet.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (10, 20))  # Tamaño ajustado
+        self.image = pygame.transform.scale(self.image, (16, 24))  # Tamaño ajustado
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
-        self.speedy = -10
+        self.speedy = -12
 
     def update(self):
         self.rect.y += self.speedy
@@ -31,7 +31,7 @@ class GameFunctions:
     @staticmethod
     def draw_text(surface, text, size, x, y):
         font = pygame.font.SysFont(None, size)
-        text_surface = font.render(text, True, settings.GRAY)
+        text_surface = font.render(text, True, settings.YELLOW)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         surface.blit(text_surface, text_rect)
@@ -57,18 +57,22 @@ class GameFunctions:
         all_sprites.add(bullet)
         bullets.add(bullet)
 
-    def shoot_impact(self, enemies_list, bullets):
+    def shoot_impact(self, enemies_list, bullets, all_sprites):
         impacts = pygame.sprite.groupcollide(enemies_list, bullets, True, True)
         for impact in impacts:
+            explosion = Explosion(impact.rect.center)
+            all_sprites.add(explosion)
             self._score_ += 25  # Incrementar el puntaje
 
 
-    def colission_detection(self, player, enemies, green_manager, red_manager):
+    def colission_detection(self, player, enemies, green_manager, red_manager,all_sprites):
         from enemies import Greenalien, Redalien
         collision = pygame.sprite.spritecollide(player, enemies, True)
         for hit in collision:
-            print(player.live_player)
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
             player.live_player -=25
+            print(player.live_player)
                     # Identificar el tipo de enemigo
 
             if isinstance(hit, Greenalien):
@@ -91,32 +95,36 @@ class GameFunctions:
         return self._score_
 
 class Explosion(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self,center):
         super().__init__()
-        self.image = pygame.image.load("assets/images/explosion1.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (80, 80))  # Tamaño ajustado
+        self.explosion_animation_list = []
+        self.explosion_animation()  # Inicializar la lista de animaciones
+        self.image = self.explosion_animation_list[0]
         self.rect = self.image.get_rect()
-        self.rect.centerx = x
-        self.rect.bottom = y
-        self.speedy = -10
-        self.life = 5
+        self.rect.center = center
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate  = 55
 
     def update(self):
-        self.rect.y += self.speedy
-        if self.rect.bottom < 0:  # Eliminar la bala cuando salga de la pantalla
-            self.kill()
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(self.explosion_animation_list):
+                self.kill()
+            else:
+                center = self.rect.center
+                self.image = self.explosion_animation_list[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
 
-    def explosion_animation( self, enemies, green_manager, red_manager):
-        explosion_animation = []
-        file="assets/images/explosion.png"
-        img = pygame.image.load(file).convert_alpha()
-        img.set_colorkey(settings.BLACK)
-        img_scale = pygame.transform.scale(img, (80, 80))
-        for alien in enemies:
-            explosion_animation.append(img_scale)
-            alien.rect.y += 5
-            alien.rect.x += 5
-        return explosion_animation
 
-    def kill(self):
-        self.killed = True
+    def explosion_animation(self):
+        self.explosion_animation_list = []
+        for i in range(1,4):
+            file=f"assets/images/images/explosion{i}.png"
+            img = pygame.image.load(file).convert_alpha()
+            img.set_colorkey(settings.BLACK)
+            img_scale = pygame.transform.scale(img, (80, 80))
+            self.explosion_animation_list.append(img_scale)

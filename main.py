@@ -15,26 +15,27 @@ def main():
     pygame.display.set_caption("Space Cat!")
     clock = pygame.time.Clock()
 
-    all_sprites = pygame.sprite.Group()
-    player = Player()
+   
     bg = Background.background()
     music = Sounds.music_main()
 
-
-
-
-    all_sprites.add(player)
-
-    green_alien_manager = GreenalienManager(2, all_sprites)
-    red_alien_manager = RedalienManager(0, all_sprites)
-    enemies_list = pygame.sprite.Group(*green_alien_manager.enemies,*red_alien_manager.enemies)
-    largo=len(green_alien_manager.enemies)
-    bullets = pygame.sprite.Group()
-    game_functions = GameFunctions()
-    level_manager = Levels()
     running = True
-
+    game_over = True
     while running:
+        if game_over:
+            utils.screen_no_game.screen(screen, clock)
+            game_over = False
+            all_sprites = pygame.sprite.Group()
+            player = Player()
+            all_sprites.add(player)
+
+            green_alien_manager = GreenalienManager(2, all_sprites)
+            red_alien_manager = RedalienManager(0, all_sprites)
+            enemies_list = pygame.sprite.Group(*green_alien_manager.enemies,*red_alien_manager.enemies)
+            bullets = pygame.sprite.Group()
+            game_functions = GameFunctions()
+            level_manager = Levels()
+        
         clock.tick(60)
 
         for event in pygame.event.get():
@@ -51,22 +52,28 @@ def main():
         all_sprites.update()
 
         # Verificar impactos y colisiones
-        game_functions.shoot_impact(enemies_list, bullets)
+        game_functions.shoot_impact(enemies_list, bullets,all_sprites)
         enemies_list = pygame.sprite.Group(*green_alien_manager.enemies, *red_alien_manager.enemies)
 
-        live_after_colission =  game_functions.colission_detection(player, enemies_list, green_alien_manager, red_alien_manager)
+        live_after_colission =  game_functions.colission_detection(player, enemies_list, green_alien_manager, red_alien_manager,all_sprites)
         if not live_after_colission:
-            return False 
+            utils.screen_no_game.screen_lost(screen, clock)
+            game_over = True
+
 
         # Cambiar nivel y generar enemigos adicionales
 
         # Verificar si se sube de nivel
         if level_manager.check_level_up(green_alien_manager, red_alien_manager):
-            level_manager.increase_difficulty(green_alien_manager, red_alien_manager)
-
-            # Actualizar lista de enemigos
+            lm=level_manager.increase_difficulty(green_alien_manager, red_alien_manager,screen,bg,clock)
             enemies_list = pygame.sprite.Group(*green_alien_manager.enemies, *red_alien_manager.enemies)
             print(f"Nueva lista de enemigos generada: {len(enemies_list)} enemigos para Nivel {level_manager.level}")  # DEBUG
+
+            if not lm:
+                game_over = True
+
+            
+            # Actualizar lista de enemigos
 
                 # Dibujar todo en pantalla
         screen.blit(bg, [0, 0])
