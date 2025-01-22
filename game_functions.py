@@ -87,6 +87,36 @@ class GameFunctions:
         return True
 
 
-
     def get_score(self):
         return self._score_
+
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.image.load("assets/images/explosion1.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (80, 80))  # Tamaño ajustado
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = y
+        self.speedy = -10
+        self.life = 5
+
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.bottom < 0:  # Eliminar la bala cuando salga de la pantalla
+            self.kill()
+
+    def explosion_animation( self, enemies, green_manager, red_manager):
+        explosion_animation = []
+        file="assets/images/explosion.png"
+        img = pygame.image.load(file).convert_alpha()
+        img.set_colorkey(settings.BLACK)
+        img_scale = pygame.transform.scale(img, (80, 80))
+        for alien in enemies:
+            explosion_animation.append(img_scale)
+            alien.rect.y += 5
+            alien.rect.x += 5
+        return explosion_animation
+
+    def kill(self):
+        self.killed = True
