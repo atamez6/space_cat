@@ -4,7 +4,7 @@ import pygame, settings
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()   
-        self.image = pygame.image.load("assets/images/avatars/player.png").convert_alpha()
+        self.image = pygame.image.load("assets/images/avatars/player_cat.png").convert_alpha()
         image_resize = (80, 80)  # Cambiar al tamaño deseado
         self.image = pygame.transform.scale(self.image, image_resize)
 
