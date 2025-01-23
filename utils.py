@@ -23,7 +23,7 @@ class screen_no_game():
         screen.blit(overlay, [0, 0])
         GameFunctions.draw_text(screen, "Space Cat!", 75, settings.WIDTH // 2, settings.HEIGHT // 4)
         GameFunctions.draw_text(screen, "Press Space to start!", 75, settings.WIDTH // 2, settings.HEIGHT // 2 )
-        GameFunctions.draw_text(screen, "instructions => Help the Space Cat to reach 10 Level!", 25, settings.WIDTH // 2, settings.HEIGHT // 2 + 80)
+        GameFunctions.draw_text(screen, "instructions => Help the Space Cat to reach 13 Level!", 25, settings.WIDTH // 2, settings.HEIGHT // 2 + 80)
         pygame.display.flip()
         seleccionando = True
         while seleccionando:

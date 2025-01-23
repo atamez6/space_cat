@@ -44,7 +44,7 @@ class Levels:
         elif self.level in [5, 9]:
             green_manager.add_enemy(self.level // 2 +1)
             red_manager.add_enemy(self.level)
-        elif self.level == 10:
+        elif self.level == 13:
             utils.screen_no_game.screen_win(screen, clock)
             return False
         return True
