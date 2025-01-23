@@ -1,5 +1,5 @@
 import pygame, settings, random
-from game_functions import GameFunctions
+
 
 class Background():
     @staticmethod
@@ -13,8 +13,25 @@ class Sounds():
         pygame.mixer.music.load("assets/sounds/music.wav")
         pygame.mixer.music.play(loops=-1)
         pygame.mixer.music.set_volume(0.6)
+    
+    @staticmethod
+    def collision_sound():
+        # Sonido de colisión
+        collision = pygame.mixer.Sound("assets/sounds/collision.wav")
+        collision.set_volume(0.6)
+        collision.play()
+
+    @staticmethod
+    def shoot_sound():
+        # Sonido de disparo
+        shoot = pygame.mixer.Sound("assets/sounds/shoot.wav")
+        shoot.set_volume(0.6)
+        shoot.play()
+    
+from game_functions import GameFunctions
 
 class screen_no_game():
+    
     @staticmethod
     def screen(screen,clock):
         screen.blit(Background.background(), [0, 0])

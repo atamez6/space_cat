@@ -3,6 +3,7 @@ import settings
 from enemies import *
 from player import *
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -22,10 +23,10 @@ class Bullet(pygame.sprite.Sprite):
     
 
 
-
+from utils import Sounds
 class GameFunctions:
     
-
+    
     def __init__(self):
         self._score_ = 0  # Inicializa el puntaje en 0
     @staticmethod
@@ -56,10 +57,12 @@ class GameFunctions:
         bullet = Bullet(player.rect.centerx, player.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        collision_sound = Sounds.shoot_sound()
 
     def shoot_impact(self, enemies_list, bullets, all_sprites):
         impacts = pygame.sprite.groupcollide(enemies_list, bullets, True, True)
         for impact in impacts:
+            collision_sound = Sounds.collision_sound()
             explosion = Explosion(impact.rect.center)
             all_sprites.add(explosion)
             self._score_ += 25  # Incrementar el puntaje
@@ -67,8 +70,10 @@ class GameFunctions:
 
     def colission_detection(self, player, enemies, green_manager, red_manager,all_sprites):
         from enemies import Greenalien, Redalien
+        
         collision = pygame.sprite.spritecollide(player, enemies, True)
         for hit in collision:
+            collision_sound = Sounds.collision_sound()
             explosion = Explosion(hit.rect.center)
             all_sprites.add(explosion)
             player.live_player -=25
