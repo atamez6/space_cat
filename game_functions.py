@@ -2,12 +2,13 @@ import pygame
 import settings
 from enemies import *
 from player import *
+from obstacles import Obstacle
 
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load("assets/images/avatars/banana_bullet.png").convert_alpha()
+        self.image = pygame.image.load("assets/images/avatars/banana.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (16, 24))  # Tamaño ajustado
         self.rect = self.image.get_rect()
         self.rect.centerx = x
@@ -66,7 +67,7 @@ class GameFunctions:
             explosion = Explosion(impact.rect.center)
             all_sprites.add(explosion)
             self._score_ += 25  # Incrementar el puntaje
-
+        
 
     def colission_detection(self, player, enemies, green_manager, red_manager,all_sprites):
         from enemies import Greenalien, Redalien
@@ -94,8 +95,42 @@ class GameFunctions:
                 return False
             
         return True
+    
+    def banana_effect(self, enemies_list, green_manager, red_manager, level_manager):
+        # Contar enemigos eliminados
+        eliminated_count = len(enemies_list)
 
+        # Incrementar el puntaje proporcionalmente
+        self._score_ += eliminated_count * 25
 
+        # Eliminar todos los enemigos
+        for enemy in enemies_list:
+            enemy.kill()
+
+        # Subir solo un nivel
+        if eliminated_count > 0:
+            print(f"¡Banana recogida! Eliminaste {eliminated_count} enemigos.")
+            level_manager.level += 1  # Incrementar solo un nivel
+            level_manager.level_up_sound.play()  # Reproducir sonido de nivel
+            green_manager.add_enemy(level_manager.level)
+            if level_manager.level >= 3:  # Ajustar para niveles altos
+                red_manager.add_enemy(level_manager.level // 2)  # Menos enemigos rojos
+
+        print(f"Nuevo nivel: {level_manager.level}")
+
+        
+    def spawn_obstacles(self, obstacle_group, all_sprites, center_only=True):
+        for _ in range(2):  # Generar dos obstáculos
+            if center_only:
+                x = random.randint(settings.WIDTH // 3, (settings.WIDTH * 2) // 3)
+                y = random.randint(settings.HEIGHT // 3, (settings.HEIGHT * 2) // 3)
+            else:
+                x = random.randint(50, settings.WIDTH - 50)
+                y = random.randint(50, settings.HEIGHT - 50)
+            obstacle = Obstacle(x, y)
+            obstacle_group.add(obstacle)
+            all_sprites.add(obstacle)
+            
     def get_score(self):
         return self._score_
 
@@ -133,3 +168,28 @@ class Explosion(pygame.sprite.Sprite):
             img.set_colorkey(settings.BLACK)
             img_scale = pygame.transform.scale(img, (80, 80))
             self.explosion_animation_list.append(img_scale)
+
+
+
+
+
+
+class Banana(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.image.load("assets/images/avatars/banana.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (50, 50))  # Ajustar tamaño
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.speed_y = random.randint(2, 4)  # Velocidad vertical aleatoria
+
+    def update(self):
+        self.rect.y += self.speed_y  # Movimiento vertical
+        if self.rect.top > settings.HEIGHT:  # Si sale de la pantalla
+            self.kill()  # Elimina la banana del grupo de sprites
+
+    @staticmethod
+    def spawn_randomly(width, height):
+        x = random.randint(0, width - 50)  # Posición horizontal aleatoria
+        y = -50  # Comienza fuera de la pantalla
+        return Banana(x, y)

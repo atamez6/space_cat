@@ -6,6 +6,10 @@ class Background():
     def background():
         background = pygame.image.load("assets/images/backgrounds/1.png").convert()
         return pygame.transform.scale(background, (800, 600))
+    @staticmethod
+    def background2():
+        background = pygame.image.load("assets/images/backgrounds/2.png").convert()
+        return pygame.transform.scale(background, (800, 600))
 
 class Sounds():
     @staticmethod
@@ -27,6 +31,10 @@ class Sounds():
         shoot = pygame.mixer.Sound("assets/sounds/shoot.wav")
         shoot.set_volume(0.6)
         shoot.play()
+    def play_banana_power_sound():
+        banana_power = pygame.mixer.Sound("assets/sounds/banana_power.wav")
+        banana_power.set_volume(0.6)
+        banana_power.play()
     
 from game_functions import GameFunctions
 
@@ -34,13 +42,13 @@ class screen_no_game():
     
     @staticmethod
     def screen(screen,clock):
-        screen.blit(Background.background(), [0, 0])
+        screen.blit(Background.background2(), [0, 0])
         overlay = pygame.Surface((settings.WIDTH, settings.HEIGHT))
         overlay.set_alpha(128)
         screen.blit(overlay, [0, 0])
         GameFunctions.draw_text(screen, "Space Cat!", 75, settings.WIDTH // 2, settings.HEIGHT // 4)
         GameFunctions.draw_text(screen, "Press Space to start!", 75, settings.WIDTH // 2, settings.HEIGHT // 2 )
-        GameFunctions.draw_text(screen, "instructions => Help the Space Cat to reach 13 Level!", 25, settings.WIDTH // 2, settings.HEIGHT // 2 + 80)
+        GameFunctions.draw_text(screen, "instructions => Help the Space Cat to reach 13 Level! The Banana is ally!", 25, settings.WIDTH // 2, settings.HEIGHT // 2 + 80)
         pygame.display.flip()
         seleccionando = True
         while seleccionando:
@@ -55,7 +63,7 @@ class screen_no_game():
                         seleccionando = False
     @staticmethod
     def screen_win(screen,clock):
-        screen.blit(Background.background(), [0, 0])
+        screen.blit(Background.background2(), [0, 0])
         overlay = pygame.Surface((settings.WIDTH, settings.HEIGHT))
         overlay.set_alpha(128)
         screen.blit(overlay, [0, 0])
@@ -77,13 +85,13 @@ class screen_no_game():
 
     @staticmethod
     def screen_lost(screen,clock):
-        screen.blit(Background.background(), [0, 0])
+        screen.blit(Background.background2(), [0, 0])
         overlay = pygame.Surface((settings.WIDTH, settings.HEIGHT))
         overlay.set_alpha(128)
         screen.blit(overlay, [0, 0])
         GameFunctions.draw_text(screen, "Game Over!", 75, settings.WIDTH // 2, settings.HEIGHT // 4)
         GameFunctions.draw_text(screen, "Space Cat!", 75, settings.WIDTH // 2, settings.HEIGHT // 2 )
-
+        GameFunctions.draw_text(screen, "Press Space to restart!", 25, settings.WIDTH // 2, settings.HEIGHT // 2 + 80)
 
         pygame.display.flip()
         seleccionando = True

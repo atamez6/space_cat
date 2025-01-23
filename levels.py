@@ -22,7 +22,7 @@ class Levels:
     def draw_level(self, surface):
         # Dibujar el nivel actual en pantalla
         font = pygame.font.SysFont(None, 25)
-        text_surface = font.render(f"Nivel: {self.level}", True, (255, 255, 255))
+        text_surface = font.render(f"Level: {self.level}", True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=(settings.WIDTH // 2, 35))
         surface.blit(text_surface, text_rect)
 

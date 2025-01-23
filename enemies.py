@@ -65,3 +65,4 @@ class RedalienManager:
             self.enemies.add(enemy)
             self.all_sprites.add(enemy)
             print(f"Enemigo añadido: Nivel {level}, Total: {len(self.enemies)}")  # DEBUG
+
