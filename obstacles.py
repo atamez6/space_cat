@@ -4,18 +4,16 @@ import settings
 import pygame
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x, y, image_path="assets/images/avatars/planeta.png"):
+    def __init__(self, x, y, image_path):
         super().__init__()
-        self.image = pygame.image.load(image_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (100, 100))  # Tamaño ajustado
-        self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-        self.health = 100  # Vida del obstáculo
-
-    def take_damage(self):
-        self.health -= 50  # Reduce la vida
-        if self.health <= 0:
-            self.kill()  # Elimina el obstáculo si su vida es 0 o menos
+        self.image = pygame.image.load('assets/images/avatars/planeta.png').convert_alpha()
+        self.image_resize = (80, 80)  # Cambiar al tamaño deseado
+        self.image = pygame.transform.scale(self.image, self.image_resize)
+        self.rect = self.image.get_rect(center=(x, y))
+        shrink_factor = 0.7  # Ajusta este valor según lo necesario
+        self.rect.width = int(self.rect.width * shrink_factor)
+        self.rect.height = int(self.rect.height * shrink_factor)
+        self.rect.center = (x, y)  # Reajustar la posición al centro
 
     def update(self):
-        pass  # Los obstáculos no tienen movimiento
+        pass  # Obstáculos estáticos no necesitan actualización

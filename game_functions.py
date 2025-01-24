@@ -96,7 +96,19 @@ class GameFunctions:
             
         return True
     
-    def banana_effect(self, enemies_list, green_manager, red_manager, level_manager):
+    def handle_collisions(self, player, enemies, bullets, obstacles):
+        # Colisión bala-obstáculo
+        bullet_obstacle_hits = pygame.sprite.groupcollide(obstacles, bullets, False, True)
+        for obstacle in bullet_obstacle_hits:
+            Sounds.collision_sound()  # Sonido al impactar obstáculo
+
+        # Colisión enemigo-obstáculo
+        for enemy in enemies:
+            if pygame.sprite.spritecollideany(enemy, obstacles):
+                enemy.speed_axe_y = abs(enemy.speed_axe_y)  # Asegurar que rebota hacia abajo
+                enemy.rect.y += 10  # Pequeño ajuste visual para evitar "atascos" y evitar que el enemigo se mueva fuera de la pantalla
+                
+    def banana_effect(self, enemies_list, green_manager, red_manager, level_manager,all_sprites):
         # Contar enemigos eliminados
         eliminated_count = len(enemies_list)
 
@@ -105,6 +117,11 @@ class GameFunctions:
 
         # Eliminar todos los enemigos
         for enemy in enemies_list:
+
+            collision_sound = Sounds.collision_sound()
+            explosion = Explosion(enemy.rect.center)
+            all_sprites.add(explosion)
+           
             enemy.kill()
 
         # Subir solo un nivel
@@ -113,6 +130,7 @@ class GameFunctions:
             level_manager.level += 1  # Incrementar solo un nivel
             level_manager.level_up_sound.play()  # Reproducir sonido de nivel
             green_manager.add_enemy(level_manager.level)
+            
             if level_manager.level >= 3:  # Ajustar para niveles altos
                 red_manager.add_enemy(level_manager.level // 2)  # Menos enemigos rojos
 

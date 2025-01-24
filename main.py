@@ -40,6 +40,10 @@ def main():
             bullets = pygame.sprite.Group()
             game_functions = GameFunctions()
             level_manager = Levels()
+            obstacle1 = Obstacle(settings.WIDTH // 3, settings.HEIGHT // 2, 'assets/images/planeta1.png')
+            obstacle2 = Obstacle(2 * settings.WIDTH // 3, settings.HEIGHT // 2, 'assets/images/planeta2.png')
+            obstacle_group.add(obstacle1, obstacle2)
+            all_sprites.add(obstacle1, obstacle2)
         
         clock.tick(60)
 
@@ -59,6 +63,7 @@ def main():
 
         # Actualizar sprites
         all_sprites.update()
+        game_functions.handle_collisions(player, enemies_list, bullets, obstacle_group)
 
         # Verificar impactos y colisiones
         game_functions.shoot_impact(enemies_list, bullets,all_sprites)
@@ -73,7 +78,7 @@ def main():
         if collected_banana:
             Sounds.play_banana_power_sound()  # Reproducir el sonido
             collected_banana.kill()  # Eliminar la banana
-            game_functions.banana_effect(enemies_list, green_alien_manager, red_alien_manager, level_manager)  # Aplicar efecto
+            game_functions.banana_effect(enemies_list, green_alien_manager, red_alien_manager, level_manager,all_sprites)  # Aplicar efecto
             enemies_list = pygame.sprite.Group(*green_alien_manager.enemies, *red_alien_manager.enemies)
         
         if game_functions.get_score() % 200 == 0 and len(obstacle_group) == 0:
